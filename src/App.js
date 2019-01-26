@@ -1,26 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container } from 'reactstrap';
+import SearchForm from './SearchForm';
+import ArtistList from './ArtistList';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      results: [],
+    };
+  }
+
+  searchSpotify = (formData) => {
+    let { artist, album, track } = formData;
+    this.setState(st => ({
+      results: [
+        ...st.results, 
+        {artist, album, track}
+      ]
+    }));
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Container className="App px-3">
+        <h1 className="text-center pt-3">Spotify Search</h1>
+        <SearchForm 
+          searchSpotify={this.searchSpotify} />
+        <ArtistList results={this.state.results} />
+      </Container>
     );
   }
 }
