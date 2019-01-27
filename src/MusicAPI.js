@@ -39,7 +39,7 @@ class MusicAPI {
 
   /** get a list of jobs */
   static async search(query) {
-    const res = await this.request(`search`, { query });
+    const res = await this.request(`search`, { ...query });
     return res;
   }
 }
