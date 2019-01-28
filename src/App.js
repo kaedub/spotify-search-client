@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button } from 'reactstrap';
+import { Container, Row, Button, Jumbotron } from 'reactstrap';
 import SearchForm from './SearchForm';
 import ArtistList from './ArtistList';
 import MusicAPI from './MusicAPI';
@@ -16,7 +16,9 @@ class App extends Component {
 
     this.state = {
       loggedIn: (token ? true: false),
-      results: [],
+      artists: [],
+      albums: [],
+      tracks: [],
     };
   }
 
@@ -25,12 +27,10 @@ class App extends Component {
     let token = localStorage.getItem("token");
 
     if (queries['access_token']) {
-      console.log('access token from query params:', queries['access_token']);
       localStorage.setItem('token', queries['access_token']);
       this.setState({loggedIn: true});
     }
-    else if (token){
-      console.log('access token from local storage:', token);
+    else if (token) {
       this.setState({loggedIn: true});
     }
   }
@@ -45,13 +45,12 @@ class App extends Component {
     let { artist, album, track } = formData;
 
     let results = await MusicAPI.search({ artist, album, track })
-    console.log('results', results);
-    // this.setState(st => ({
-    //   results: [
-    //     ...st.results, 
-    //     {artist, album, track}
-    //   ]
-    // }));
+
+    this.setState({
+      artists: results.data.artists,
+      albums: results.data.albums,
+      tracks: results.data.tracks,
+    });
   }
 
   /** 
@@ -59,34 +58,36 @@ class App extends Component {
    */
   loginPage = () => {
     return (
-      <a href={`${SERVER_BASE_URL}/login`}>
-        <Button color="danger">Login with Spotify</Button>
-      </a>
+      <Jumbotron 
+        className="py-5 text-center"
+        style={{height: "100vh"}}>
+        <a href={`${SERVER_BASE_URL}/login`}>
+          <Button color="primary">Login with Spotify</Button>
+        </a>
+      </Jumbotron>
     );
   }
 
   searchPage = () => {
     return(  
-      <React.Fragment>
-        <Button 
-          color="danger"
-          onClick={this.handleLogout}>Logout</Button>
+      <Container className="App px-3 pt-3">
+        <Row className="d-flex flex-row-reverse px-3">
+          <Button 
+            color="danger"
+            onClick={this.handleLogout}>Logout</Button>
+        </Row>
         <h1 className="text-center pt-3">Spotify Search</h1>
         <SearchForm 
           searchSpotify={this.searchSpotify} />
-        { this.state.results.length ? 
-          <ArtistList results={this.state.results} /> :
+        { this.state.artists.length ? 
+          <ArtistList artists={this.state.artists} /> :
           <div>No Results</div>}
-      </React.Fragment>
+      </Container>
     );
   }
 
   render() {
-    return (
-      <Container className="App px-3 pt-3">
-        { this.state.loggedIn ? this.searchPage() : this.loginPage()}
-      </Container>
-    );
+    return this.state.loggedIn ? this.searchPage() : this.loginPage();
   }
 }
 

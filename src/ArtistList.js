@@ -8,11 +8,10 @@ class ArtistList extends Component {
     return (
     <div>
       <ListGroup>
-      {this.props.results.map(result => (
-      <ListGroupItem>
+      {this.props.artists.map(artist => (
+      <ListGroupItem key={artist.id}>
         <ArtistCard 
-          name={result.artist}
-          popularity={85} />
+          artist={artist} />
       </ListGroupItem>
       ))}
       </ListGroup>
