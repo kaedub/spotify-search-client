@@ -6,7 +6,7 @@ class SearchForm extends Component {
     super(props);
     
     this.state = {
-      artist: '',
+      query: '',
       album: '',
       track: '',
     };
@@ -18,11 +18,11 @@ class SearchForm extends Component {
 
   handleSubmit = (evt) => {
     evt.preventDefault();
-    
+
     this.props.searchSpotify({
-        artist: this.state.artist,
-        album: this.state.album,
-        track: this.state.track,
+        artist: this.state.query,
+        // album: this.state.album,
+        // track: this.state.track,
     })
   }
 
@@ -34,12 +34,12 @@ class SearchForm extends Component {
 
           <FormGroup>
             <Input
-              name="artist"
-              value={this.state.artist}
-              placeholder="artist"
+              name="query"
+              value={this.state.query}
+              placeholder="Search by artist, album, or track name"
               onChange={this.handleChange} />
           </FormGroup>
-
+{/* 
           <FormGroup>
             <Input
               name="album"
@@ -54,7 +54,7 @@ class SearchForm extends Component {
               value={this.state.track}
               placeholder="track"
               onChange={this.handleChange} />
-          </FormGroup>
+          </FormGroup> */}
 
           <Button color="primary">Search</Button>
         </Form>
