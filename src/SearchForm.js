@@ -19,11 +19,8 @@ class SearchForm extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
 
-    this.props.searchSpotify({
-        artist: this.state.query,
-        // album: this.state.album,
-        // track: this.state.track,
-    })
+    if (this.state.query.length)
+      this.props.searchSpotify(this.state.query)
   }
 
   render() {
@@ -39,22 +36,7 @@ class SearchForm extends Component {
               placeholder="Search by artist, album, or track name"
               onChange={this.handleChange} />
           </FormGroup>
-{/* 
-          <FormGroup>
-            <Input
-              name="album"
-              value={this.state.album}
-              placeholder="album"
-              onChange={this.handleChange} />
-          </FormGroup>
 
-          <FormGroup>
-            <Input
-              name="track"
-              value={this.state.track}
-              placeholder="track"
-              onChange={this.handleChange} />
-          </FormGroup> */}
 
           <Button color="primary">Search</Button>
         </Form>

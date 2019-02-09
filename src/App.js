@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Row, Button, Jumbotron } from 'reactstrap';
 import SearchForm from './SearchForm';
-import ArtistList from './ArtistList';
+import ResultsList from './Results';
 import MusicAPI from './MusicAPI';
 import queryString from 'query-string';
 
 
 const SERVER_BASE_URL = 'http://localhost:5000';
+const SPOTIFY_BASE_URL = 'http://localhost:5000';
 
 class App extends Component {
   constructor(props) {
@@ -41,10 +42,9 @@ class App extends Component {
   }
 
 
-  searchSpotify = async (formData) => {
-    let { artist, album, track } = formData;
-
-    let results = await MusicAPI.search({ artist, album, track })
+  searchSpotify = async (query) => {
+    let results = await MusicAPI.search(query)
+    console.log('results', results)
 
     this.setState({
       artists: results.data.artists,
@@ -71,17 +71,26 @@ class App extends Component {
   searchPage = () => {
     return(  
       <Container className="App px-3 pt-3">
+
         <Row className="d-flex flex-row-reverse px-3">
           <Button 
             color="danger"
             onClick={this.handleLogout}>Logout</Button>
         </Row>
+
         <h1 className="text-center pt-3">Spotify Search</h1>
+
         <SearchForm 
           searchSpotify={this.searchSpotify} />
-        { this.state.artists.length ? 
+  
+        <ResultsList 
+          artists={this.state.artists}
+          albums={this.state.albums}
+          tracks={this.state.tracks} />
+          
+        {/* { this.state.artists.length ? 
           <ArtistList artists={this.state.artists} /> :
-          <div>No Results</div>}
+          <div>No Results</div>} */}
       </Container>
     );
   }

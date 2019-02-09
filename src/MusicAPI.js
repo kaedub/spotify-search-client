@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // allow base url to be set as environment variable or localhost:3001
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000";
+const BASE_URL = process.env.API_BASE_URL || "http://localhost:5000";
 
 class MusicAPI {
   static async request(endpoint, params = {}, verb = "get") {
@@ -39,7 +39,7 @@ class MusicAPI {
 
   /** get a list of jobs */
   static async search(query) {
-    const res = await this.request(`search`, { ...query });
+    const res = await this.request(`search`, { query });
     return res;
   }
 }
